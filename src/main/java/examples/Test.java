@@ -33,11 +33,27 @@ public class Test {
 		
 		
 	}
-	
+
+	static public int test2(int x, int y) {
+		int z=x-y;
+//		 z = Debug.makeSymbolicInteger(Debug.getSymbolicIntegerValue(z));
+
+		if (x > y && y > 0) {
+	        if (z > 0) {
+	            return 1;
+	        } else {
+	            return 0;
+	        }
+		} else {
+			return -1;
+		}
+
+	}
+
 	
 	// The test driver
 	public static void main(String[] args) {
-		test(1, 2);
+		int r = test2(1, 2);
 		Debug.printPC("\n Path Condition: ");
 		
 	}

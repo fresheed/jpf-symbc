@@ -3,10 +3,11 @@
 # unix shell script to run jpf
 #
 
-JPF_HOME=`dirname "$0"`/..
+#JPF_HOME=`dirname "$0"`/..
+JPF_HOME="/home/fresheed/IdeaProjects/jpf-core"
 
 if test -z "$JVM_FLAGS"; then
   JVM_FLAGS="-Xmx1024m -ea"
 fi
 
-java $JVM_FLAGS -jar "$JPF_HOME/tools/RunJPF.jar" "$@"
+java $JVM_FLAGS -jar "$JPF_HOME/build/RunJPF.jar" "$@"

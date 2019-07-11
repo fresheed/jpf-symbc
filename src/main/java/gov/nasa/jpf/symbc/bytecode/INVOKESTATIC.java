@@ -42,6 +42,10 @@ public class INVOKESTATIC extends gov.nasa.jpf.jvm.bytecode.INVOKESTATIC {
 	      return th.createAndThrowException("java.lang.NoSuchMethodException!!",
 	                                   cname + '.' + mname);
 	    }
+		if (!callee.getFullName().startsWith("java.") && !callee.getFullName().startsWith("hj.")){
+			System.out.println("--- Invoking "+callee.getFullName());
+		}
+
         BytecodeUtils.InstructionOrSuper nextInstr = BytecodeUtils.execute(this, th);
         if (nextInstr.callSuper) {
             return super.execute( th);

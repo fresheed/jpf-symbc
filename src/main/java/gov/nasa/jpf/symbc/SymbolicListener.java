@@ -80,6 +80,7 @@ public class SymbolicListener extends PropertyListenerAdapter implements Publish
     private String currentMethodName = "";
 
     public SymbolicListener(Config conf, JPF jpf) {
+        System.out.println("EDITED SYMBOLIC LISTENER 2");
         jpf.addPublisherExtension(ConsolePublisher.class, this);
         allSummaries = new HashMap<String, MethodSummary>();
     }
@@ -168,7 +169,6 @@ public class SymbolicListener extends PropertyListenerAdapter implements Publish
     @Override
     public void instructionExecuted(VM vm, ThreadInfo currentThread, Instruction nextInstruction,
             Instruction executedInstruction) {
-
         if (!vm.getSystemState().isIgnored()) {
             Instruction insn = executedInstruction;
             // SystemState ss = vm.getSystemState();
@@ -195,6 +195,9 @@ public class SymbolicListener extends PropertyListenerAdapter implements Publish
 
                 if ((BytecodeUtils.isClassSymbolic(conf, className, mi, methodName))
                         || BytecodeUtils.isMethodSymbolic(conf, mi.getFullName(), numberOfArgs, null)) {
+                    System.out.println("-- in method: "+mi.getName());
+                    System.out.println("-- insn: "+md.getMnemonic());
+                    System.out.println("-- here !!");
 
                     MethodSummary methodSummary = new MethodSummary();
 
@@ -265,11 +268,13 @@ public class SymbolicListener extends PropertyListenerAdapter implements Publish
                     String longName = mi.getLongName();
                     int numberOfArgs = mi.getNumberOfArguments();
 
+//                    System.out.println("Class symbolic? "+BytecodeUtils.isClassSymbolic(conf, className, mi, methodName));
+//                    System.out.println("Method symbolic? "+BytecodeUtils.isMethodSymbolic(conf, mi.getFullName(), numberOfArgs, null));
                     if (((BytecodeUtils.isClassSymbolic(conf, className, mi, methodName))
                             || BytecodeUtils.isMethodSymbolic(conf, mi.getFullName(), numberOfArgs, null))) {
-
                         ChoiceGenerator<?> cg = vm.getChoiceGenerator();
                         if (!(cg instanceof PCChoiceGenerator)) {
+                            //System.out.println("Got a NON-symbolic branching:");
                             ChoiceGenerator<?> prev_cg = cg.getPreviousChoiceGenerator();
                             while (!((prev_cg == null) || (prev_cg instanceof PCChoiceGenerator))) {
                                 prev_cg = prev_cg.getPreviousChoiceGenerator();
@@ -277,6 +282,7 @@ public class SymbolicListener extends PropertyListenerAdapter implements Publish
                             cg = prev_cg;
                         }
                         if ((cg instanceof PCChoiceGenerator) && ((PCChoiceGenerator) cg).getCurrentPC() != null) {
+                            System.out.println("Got a symbolic branching:");
                             PathCondition pc = ((PCChoiceGenerator) cg).getCurrentPC();
                             // pc.solve(); //we only solve the pc
                             if (SymbolicInstructionFactory.concolicMode) { // TODO: cleaner
