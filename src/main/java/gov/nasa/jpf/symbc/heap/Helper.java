@@ -20,6 +20,7 @@ package gov.nasa.jpf.symbc.heap;
 
 
 
+import gov.nasa.jpf.symbc.Concrete;
 import gov.nasa.jpf.symbc.arrays.ArrayExpression;
 import gov.nasa.jpf.symbc.arrays.ArrayHeapNode;
 import gov.nasa.jpf.symbc.arrays.HelperResult;
@@ -45,9 +46,16 @@ import gov.nasa.jpf.vm.ReferenceFieldInfo;
 import gov.nasa.jpf.vm.StaticElementInfo;
 import gov.nasa.jpf.vm.ThreadInfo;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class Helper {
 
 	//public static SymbolicInteger SymbolicNull = new SymbolicInteger("SymbolicNull"); // hack for handling static fields; may no longer need it
+	private final static Set<String> forcedConcrete = new HashSet<>();
+	static {
+
+	}
 
 	public static Expression initializeInstanceField(FieldInfo field, ElementInfo eiRef,
 			String refChain, String suffix){
@@ -61,13 +69,19 @@ public class Helper {
 		} else if (field instanceof FloatFieldInfo || field instanceof DoubleFieldInfo) {
 			sym_v = new SymbolicReal(fullName);
 		} else if (field instanceof ReferenceFieldInfo){
-			if (field.getType().equals("java.lang.String"))
+			if (field.getType().equals("java.lang.String")) {
 				sym_v = new StringSymbolic(fullName);
-			else
+			} else {
 				sym_v = new SymbolicInteger(fullName);
+			}
 		} else if (field instanceof BooleanFieldInfo) {
 				//	treat boolean as an integer with range [0,1]
 				sym_v = new SymbolicInteger(fullName, 0, 1);
+		}
+
+
+		if (eiRef.getClassInfo().getName().equals("hj.runtime.wsh.Activity")){
+			return;
 		}
 		eiRef.setFieldAttr(field, sym_v);
 		return sym_v;
