@@ -70,7 +70,8 @@ public class SymbolicListener extends PropertyListenerAdapter implements Publish
         if ((cg instanceof PCChoiceGenerator) && ((PCChoiceGenerator) cg).getCurrentPC() != null) {
             PathCondition pc = ((PCChoiceGenerator) cg).getCurrentPC();
             String error = search.getLastError().getDetails();
-            error = "\"" + error.substring(0, error.indexOf("\n")) + "...\"";
+            //System.out.println("Violation Details: "+error);
+            //error = "\"" + error.substring(0, error.indexOf("\n")) + "...\"";
             if (SymbolicInstructionFactory.concolicMode) { // TODO: cleaner
                 SymbolicConstraintsGeneral solver = new SymbolicConstraintsGeneral();
                 PCAnalyzer pa = new PCAnalyzer();

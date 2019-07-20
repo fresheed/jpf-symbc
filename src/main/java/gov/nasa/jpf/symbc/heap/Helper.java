@@ -80,9 +80,6 @@ public class Helper {
 		}
 
 
-		if (eiRef.getClassInfo().getName().equals("hj.runtime.wsh.Activity")){
-			return;
-		}
 		eiRef.setFieldAttr(field, sym_v);
 		return sym_v;
 	}
