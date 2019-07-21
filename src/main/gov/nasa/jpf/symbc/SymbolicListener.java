@@ -135,7 +135,9 @@ public class SymbolicListener extends PropertyListenerAdapter implements Publish
         if ((cg instanceof PCChoiceGenerator) && ((PCChoiceGenerator) cg).getCurrentPC() != null) {
             PathCondition pc = ((PCChoiceGenerator) cg).getCurrentPC();
             String error = search.getLastError().getDetails();
-            error = "\"" + error.substring(0, error.indexOf("\n")) + "...\"";
+
+            //error = "\"" + error.substring(0, error.indexOf("\n")) + "...\"";
+
             // C: not clear where result was used here -- to review
             // PathCondition result = new PathCondition();
             // IntegerExpression sym_err = new SymbolicInteger("ERROR");
